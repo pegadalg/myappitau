@@ -16,6 +16,13 @@ export function Home() {
 
     function handleAddCard(){
 
+      const result = cards.filter(ExisteCard => ExisteCard.card === card.trim())
+      console.log(result)
+      
+      if (result.length>0) {
+        return Alert.alert('Cartão', 'Estão Cartão já foi adicionado na lista')
+      }
+
       if (card.trim() === ''){
         return Alert.alert('Cartão','É obrigatório digitar um Cartão')
         
@@ -32,8 +39,18 @@ export function Home() {
       
     }
 
-    function handleRemoveCard(){
-      console.log('Você clicou no botão Remover')
+    function handleRemoveCard(id: string, cartao: string){
+      console.log(`Você quer remover o participante ${id}`)
+      Alert.alert('Remover',`Remover o participante ${cartao}`, [
+        {
+          text: 'Sim',
+          onPress: () => setCards( cards.filter(x => x.id != id) )
+        },
+        {
+          text:'Não',
+          style: 'cancel'
+        }
+      ])
     }
 
     return (
@@ -77,9 +94,9 @@ export function Home() {
           data={cards}
           keyExtractor={item => item.id.toString()}
           renderItem={({ item }) => (
-            <Participant
+            <Participant 
               name={item.card}
-              onRemove={handleRemoveCard}
+              onRemove={() => handleRemoveCard(item.id, item.card)}
             />
           )}
           ListEmptyComponent={() => (
